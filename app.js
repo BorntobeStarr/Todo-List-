@@ -5,6 +5,7 @@ const todoList = document.querySelector(".todo-list");
 const filterOption = document.querySelector(".filter-todo");
 
 // ADD event listeners
+document.addEventListener('DOMContentLoaded', getTodos);
 todoButton.addEventListener('click', addTodo);
 todoList.addEventListener('click', deleteCheck);
 filterOption.addEventListener ('click', filterTodo);
@@ -48,6 +49,7 @@ const item = e.target;
         const todo = item.parentElement;
         //animation
         todo.classList.add("fall");
+        removeLocalTodos(todo);
         todo.addEventListener('transitionend', function(){
             todo.remove();
         })
@@ -102,3 +104,50 @@ function saveLocalTodos(todo){
 }
 
 //GET TODOS FROM LOCAL STORAGE AND DISPLAY THEM
+function getTodos(){
+        //CHECK: DO I HAVE A TODOS IN LOCAL STORAGE?
+        let todos;
+        if (localStorage.getItem("todos") === null){
+            todos = [];
+        }else{
+            todos = JSON.parse(localStorage.getItem("todos"));
+        }
+    todos.forEach(function(todo){
+         //create TODO DIV
+        const todoDiv = document.createElement("div");
+        todoDiv.classList.add("todo")
+        //create LI
+        const newTodo = document.createElement("li");
+        newTodo.innerText = todo;
+        newTodo.classList.add("todo-item");
+        todoDiv.appendChild(newTodo);
+
+        //Check Mark Button
+        const completedButton= document.createElement("button");
+        completedButton.innerHTML = '<i class="fas fa-check" > </i>';
+        completedButton.classList.add('complete-btn');
+        todoDiv.appendChild(completedButton);
+        //Trash Button
+        const trashButton= document.createElement("button");
+        trashButton.innerHTML = '<i class="fas fa-trash" > </i>';
+        trashButton.classList.add('trash-btn');
+        todoDiv.appendChild(trashButton);
+        //Append to List 
+        todoList.appendChild(todoDiv);
+    })
+}
+
+// REMOVE TODOS FROM LOCAL STORAGE AFTER CLICKING DELETE
+function removeLocalTodos(todo){
+        //CHECK: DO I HAVE A TODOS IN LOCAL STORAGE?
+        let todos;
+        if (localStorage.getItem("todos") === null){
+            todos = [];
+        }else{
+            todos = JSON.parse(localStorage.getItem("todos"));
+        }
+    const todoIndex = todo.children[0].innerText; 
+    todos.splice(todos.indexOf(todoIndex), 1);
+    localStorage.setItem("todos", JSON.stringify(todos));
+}
+
