@@ -9,12 +9,13 @@ todoButton.addEventListener('click', addTodo);
 todoList.addEventListener('click', deleteCheck);
 filterOption.addEventListener ('click', filterTodo);
 
-// //Functions
+
+// Functions
 
 function addTodo(event){
     //prevent from from submitting
     event.preventDefault();
-    //create todo DIV
+    //create TODO DIV
     const todoDiv = document.createElement("div");
     todoDiv.classList.add("todo")
     //create LI
@@ -22,8 +23,8 @@ function addTodo(event){
     newTodo.innerText = todoInput.value;
     newTodo.classList.add("todo-item");
     todoDiv.appendChild(newTodo);
-    // //ADDTODO TO LOCALSTORAGE
-    // saveLocalTodos(todoInput.value);
+    //ADD TODO TO LOCAL STORAGE 
+    saveLocalTodos(todoInput.value);
     //Check Mark Button
     const completedButton= document.createElement("button");
     completedButton.innerHTML = '<i class="fas fa-check" > </i>';
@@ -87,3 +88,17 @@ function filterTodo(e){
     });
 }
 
+//SAVE LOCAL TODOS 
+function saveLocalTodos(todo){
+    //CHECK: DO I HAVE A TODOS IN LOCAL STORAGE?
+    let todos;
+    if (localStorage.getItem("todos") === null){
+        todos = [];
+    }else{
+        todos = JSON.parse(localStorage.getItem("todos"));
+    }
+    todos.push(todo);
+    localStorage.setItem("todos", JSON.stringify(todos));
+}
+
+//GET TODOS FROM LOCAL STORAGE AND DISPLAY THEM
